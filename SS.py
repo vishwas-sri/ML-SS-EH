@@ -30,6 +30,6 @@ realize_test = 50000
 X_train, y_train = sm.MCS(realize, samples, SU)
 X_test, y_test = sm.MCS(realize_test, samples, SU)
 
-fpr, tpr, auc = model.ml_model(X_train, y_train, X_test, y_test)
+fpr, tpr, auc = model.ml_model(X_train, y_train, X_test, y_test) #, mark
 
-plot.show_plot(fpr, tpr, auc)
+plot.show_plot(fpr, tpr, auc) #, mark

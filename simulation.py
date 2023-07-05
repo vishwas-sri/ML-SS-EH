@@ -4,11 +4,12 @@ T = 100  # Time span for one slot 100ms
 mu = 0.02   # Sensing duration ratio
 t = mu*T     # Sensing time
 Pr = 0.5    # Probability of spectrum occupancy
-Pw = -60    # Primary signal power in dBm
-PowerTx = 10**(Pw/10)  # Transmitted power
-Nw = -70    # Noise power in dBm
+Pw = -60    # Primary signal power in dBm 
+PowerTx = 10**(Pw/10)  # Transmitted power 0.1
+Nw = -70   # Noise power in dBm -153 or -70
 PowerNo = 10**(Nw/10)
 g = 10**-5  # Path loss coefficeint 10^(-5)
+a = 4 #path loss factor
 d = 500  # PU-SU distance in meters
 
 
@@ -47,6 +48,6 @@ def gaussianNoise(noisePower, samples):
 def channel(N, d, g, variance, samples):
     H = np.zeros(N)
     H = np.sqrt(-2 * variance * np.log(np.random.rand(N)))/np.sqrt(2)
-    H = np.array(H*np.sqrt(d*(g)))  # Fading + path-loss (amplitude loss)
+    H = np.array(H*np.sqrt(g*(d)))  # Fading + path-loss (amplitude loss)
     H = np.vstack([H]*samples)
     return H

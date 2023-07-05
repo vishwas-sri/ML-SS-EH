@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-def show_plot(fpr, tpr,auc):
-    plt.plot(fpr, tpr, label='ROC curve (AUC = %0.2f)' % auc,markevery=0.1)
+def show_plot(fpr, tpr,auc): #,mark
+    plt.plot(fpr, tpr, label='ROC curve (AUC = %0.2f)' % auc) #,markevery=mark
     plt.plot([0, 1], [0, 1], 'k--')  # Plot the diagonal line (random classifier)
     plt.xlabel('False Positive Rate (Pf)')
     plt.ylabel('True Positive Rate (Pd)')

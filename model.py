@@ -14,10 +14,12 @@ def ml_model(X_train, y_train, X_test, y_test):
     grid_search.fit(X_train, y_train)
     best_accuracy = grid_search.best_score_
     best_parameters = grid_search.best_params_
-    y_pred = grid_search.predict(X_test)
-    cm = mt.confusion_matrix(y_test, y_pred)
-    accuracy = mt.accuracy_score(y_test, y_pred)
-    fpr, tpr, _ = mt.roc_curve(y_test,  y_pred)
+    # y_pred = grid_search.predict(X_test)
+    y_pred2=grid_search.predict_proba(X_test)
+    y_pred2=y_pred2[:,1]
+    # cm = mt.confusion_matrix(y_test, y_pred)
+    # accuracy = mt.accuracy_score(y_test, y_pred)
+    fpr, tpr, _ = mt.roc_curve(y_test,  y_pred2)
     # Create SVM classifier with linear kernel
     # clf = svm.SVC(kernel='linear')
     # # clf = svm.SVC(kernel='rbf') # gaussian
@@ -31,5 +33,6 @@ def ml_model(X_train, y_train, X_test, y_test):
     # fpr, tpr, thresholds = metrics.roc_curve(y_test, y_pred)
 
     auc = mt.auc(fpr, tpr)
-    return fpr, tpr, auc
+    # mark = int((len(fpr))*0.037)
+    return fpr, tpr, auc, #mark
 

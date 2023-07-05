@@ -1,13 +1,30 @@
 import numpy as np
 
 # DEFAULT PARAMETER
-Pr = 0.5                                                    # PU activity probability		
-TXPower = 0.1                                               # PU transmission power
+T = 100  # Time span for one slot 100ms
+mu = 0.02   # Sensing duration ratio
+t = mu*T    # Sensing time
+# PU = 1       # No. of PU
+N = 3       # No. of SU
+Pr = 0.5    # Probability of spectrum occupancy
+# Pd = 0.9    # Probability of detection
+# Pf = 0.1    # Probability of false alarm
+m = np.full(N, 20)      # Battery capacity
+Eh = 0.1    # Harvested energy during one slot
+Pw = -60    # Primary signal power in dBm
+TXPower = 10**(Pw/10)  # Transmitted power
+Nw = -70    # Noise power in dBm
+noisePower = 10**(Nw/10)*np.ones(N)
+g = 10**-5  # Path loss coefficeint 10^(-5)
+# w = 5e6     # Bandwidth
+samples = 50 
+# Pr = 0.5                                                    # PU activity probability		
+# TXPower = 10**(-60/10)                                      # PU transmission power
 w = 5e6                                                     # Bandwidth
-NoisePSD_dBm = -153                                         # Noise power spectral density	
+# NoisePSD_dBm = -153                                         # Noise power spectral density	
 # T=5e-6                                                      # sensing time
 
-def MCS(realiz,T=0.5e-6,kind='ray',variance=2,SuNumber=3):
+def MCS(realiz,t=100*0.2,kind='ray',variance=2,SuNumber=3):
     PU = np.array([0,0])*1e3                                # PU position 	
     SU = np.dstack(( np.zeros((1,SuNumber)),                # SU position
                     np.linspace(0.5,1,SuNumber)
@@ -15,9 +32,9 @@ def MCS(realiz,T=0.5e-6,kind='ray',variance=2,SuNumber=3):
     if SuNumber==1:
         SU=np.array([[0 ,750]])
     N= SuNumber             
-    noisePower= (10**(NoisePSD_dBm/10)*1e-3)*w*np.ones(N)   # Noise power
-    a= 4                                                    # Path loss factor                            
-    samples=round(2*T*w)                                    # No. of samples
+    # noisePower= (10**(NoisePSD_dBm/10)*1e-3)*w*np.ones(N)   # Noise power
+    # a= 4                                                    # Path loss factor                            
+    samples=round(2*t*w)                                    # No. of samples
     
     # PU-SU distance
     d= np.zeros(N)
@@ -31,7 +48,7 @@ def MCS(realiz,T=0.5e-6,kind='ray',variance=2,SuNumber=3):
         
     for k in range(realiz):
         n = gaussianNoise(noisePower,samples)
-        H = channel(N,d,a,kind,variance,samples)                               
+        H = channel(N,d,g,kind,variance,samples)                               
         X, S[k] = PUtx(samples,TXPower, Pr, N)
         PU=np.multiply(H.T,X)
         Z = PU + n
@@ -77,7 +94,7 @@ def channel(N,d,a,kind,variance,samples):
     #     pass
     else:
         H = np.ones(N,1)
-    H = np.array(H*np.sqrt(d**(-a)))# Fading + path-loss (amplitude loss)
+    H = np.array(H*(d*(g)))# Fading + path-loss (amplitude loss)
     H = np.vstack([H]*samples)
     
 

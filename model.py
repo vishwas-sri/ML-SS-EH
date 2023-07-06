@@ -29,10 +29,15 @@ class Classification:
         classifier = SVC()
         types = 'LinearSVM'
         # marker = "X"
-        parameters = [{'C': [0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4],
+         
+        # parameters = [{'C': [0.1, 1, 10, 100, 1000],  
+        #                 'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+        #             'kernel': ['linear'], 'probability':[True]}]
+        parameters = [{'C': [0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4,10, 100, 1000],
+                    #    'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
                     'kernel': ['linear'], 'probability':[True]}]
         grid_search = GridSearchCV(
-            estimator=classifier, param_grid=parameters, scoring='accuracy', n_jobs=-1, cv=10)
+            estimator=classifier, param_grid=parameters, scoring='accuracy', n_jobs=-1, cv=20)
         grid_search.fit(self.X_train, self.y_train)
         best_accuracy = grid_search.best_score_
         best_parameters = grid_search.best_params_
@@ -57,19 +62,25 @@ class Classification:
         auc = mt.auc(fpr, tpr)
         # mark = int((len(fpr))*0.037)
         return fpr, tpr, auc, types #mark
+    
+    
 
     def Gaussian_SVM(self):
         classifier = SVC()
         types = 'GaussianSVM'
         # marker = "X"
+        # parameters = [{'C': [0.1, 1, 10, 100, 1000],  
+        #                 'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+        #             'kernel': ['rbf'], 'probability':[True]}]
         parameters = [{'C': [0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4],
-                    'kernel': ['rbf'], 'probability':[True]}]
+                        # 'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+                        'kernel': ['rbf'], 'probability':[True]}]
         grid_search = GridSearchCV(
-            estimator=classifier, param_grid=parameters, scoring='accuracy', n_jobs=-1, cv=10)
+            estimator=classifier, param_grid=parameters, scoring='accuracy', n_jobs=-1, cv=20)
         grid_search.fit(self.X_train, self.y_train)
         best_accuracy = grid_search.best_score_
         best_parameters = grid_search.best_params_
-        # y_pred = grid_search.predict(X_test)
+        # y_pred = grid_search.predict(self.X_test)
         y_pred2=grid_search.predict_proba(self.X_test)
         y_pred2=y_pred2[:,1]
         

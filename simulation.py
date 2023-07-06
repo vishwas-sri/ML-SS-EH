@@ -54,5 +54,7 @@ def channel(N, d, g, variance, samples):
     H = np.zeros(N)
     H = np.sqrt(-2 * variance * np.log(np.random.rand(N)))/np.sqrt(2)
     H = np.array(H*np.sqrt(g*(d)))  # Fading + path-loss (amplitude loss)
+    # f = 500**(-a)
+    # H = np.array(H*np.sqrt(f))
     H = np.vstack([H]*samples)
     return H

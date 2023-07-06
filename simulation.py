@@ -8,14 +8,15 @@ Pw = -60    # Primary signal power in dBm
 PowerTx = 10**(Pw/10)  # Transmitted power 0.1
 Nw = -70   # Noise power in dBm -153 or -70
 PowerNo = 10**(Nw/10)
-g = 10**-5  # Path loss coefficeint 10^(-5)
+g = 10**(-5)  # Path loss coefficeint 10^(-5)
 a = 4 #path loss factor
-d = 500  # PU-SU distance in meters
+d = np.array((500, 750, 1000))  # PU-SU distance in meters
 
 
 def MCS(realize, samples, SU):
     Y = np.zeros((realize, SU))
     S = np.zeros((realize))
+    SNR = np.zeros((SU,realize))
 
     noisePower = PowerNo*np.ones(SU)
 
@@ -25,8 +26,12 @@ def MCS(realize, samples, SU):
         X, S[k] = PUtx(samples, PowerTx, Pr, SU)
         PU = np.multiply(H.T, X)
         Z = PU + n
-        Y[k, :] = np.sum(np.abs(Z)**2, axis=1)/(noisePower[0]*samples)
-    return Y, S
+        SNR[:,k] = np.mean(np.abs(PU)**2,axis=1)/noisePower[0]
+        Y[k,:] = np.sum(np.abs(Z)**2,axis=1)/(noisePower[0]*samples)
+
+    meanSNR = np.mean(SNR[:,S==1],1)
+    meanSNRdB = 10*np.log10(meanSNR)
+    return Y, S, meanSNR
 
 
 def PUtx(samples, TXPower, Pr, N):

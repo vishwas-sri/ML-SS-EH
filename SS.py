@@ -1,9 +1,14 @@
+"""
+This is the main file that perform
+spectrum sensing
+"""
+import copy
 import numpy as np
 import simulation as sm
 from model import Classification
 import plot
-import matplotlib.pyplot as plt
-import copy
+# import matplotlib.pyplot as plt
+
 # Simulation Parameters
 # T = 100  # Time span for one slot 100ms
 # mu = 0.02   # Sensing duration ratio
@@ -25,7 +30,7 @@ samples = 100  # No. of sample per sensing time
 # w = 5e6     # Bandwidth
 # samples = 50  # No. of sample
 # N = SU
-realize = 250
+realize = 500
 realize_test = 50000
 
 # MCS(realize,samples,SU)
@@ -49,11 +54,13 @@ demo =Classification(X_train=X_train,y_train=y_train,X_test=X_test,
 
 file.append(demo.Linear_SVM())
 file.append(demo.Gaussian_SVM())
+file.append(demo.Logistic())
+file.append(demo.NaiveBayes())
 file.append(demo.S1())
 file.append(demo.OR())
 file.append(demo.AND())
 file.append(demo.MRC())
 
-if (file != []):
+if file:
     plot.show_plot(file)  # , mark
 # plt.show()

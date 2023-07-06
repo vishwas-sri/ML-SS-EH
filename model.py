@@ -1,9 +1,12 @@
 import numpy as np
 from sklearn import metrics as mt
 from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import LogisticRegression
 from scipy import special
 
+Pfa_target=[x/10000.0 for x in range(25,10000,25)]
 class Classification:
     #print(np.concatenate((y_pred.reshpipape(len(y_pred),1), self.y_test.reshape(len(self.y_test),1)),1))
     def __init__(self, X_train=None,y_train=None,X_test=None,y_test=None,samples=None,SU=None,X_test_2=None):
@@ -22,25 +25,22 @@ class Classification:
         # self.y_combined = np.r_[self.y_train, self.y_test] 
         # self.y_train=self.y_train.reshape(-1)
         # df_train.info()
-    def main(self):
-        val=[]
+    # def main(self):
+    #     val=[]
 
     def Linear_SVM(self):
         classifier = SVC()
         types = 'LinearSVM'
         # marker = "X"
          
-        # parameters = [{'C': [0.1, 1, 10, 100, 1000],  
-        #                 'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
-        #             'kernel': ['linear'], 'probability':[True]}]
-        parameters = [{'C': [0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4,10, 100, 1000],
-                    #    'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+       
+        parameters = [{'C': [0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4,10, 100, 1000], 
                     'kernel': ['linear'], 'probability':[True]}]
         grid_search = GridSearchCV(
             estimator=classifier, param_grid=parameters, scoring='accuracy', n_jobs=-1, cv=20)
         grid_search.fit(self.X_train, self.y_train)
-        best_accuracy = grid_search.best_score_
-        best_parameters = grid_search.best_params_
+        # best_accuracy = grid_search.best_score_
+        # best_parameters = grid_search.best_params_
         # y_pred = grid_search.predict(X_test)
         y_pred2=grid_search.predict_proba(self.X_test)
         y_pred2=y_pred2[:,1]
@@ -78,8 +78,8 @@ class Classification:
         grid_search = GridSearchCV(
             estimator=classifier, param_grid=parameters, scoring='accuracy', n_jobs=-1, cv=20)
         grid_search.fit(self.X_train, self.y_train)
-        best_accuracy = grid_search.best_score_
-        best_parameters = grid_search.best_params_
+        # best_accuracy = grid_search.best_score_
+        # best_parameters = grid_search.best_params_
         # y_pred = grid_search.predict(self.X_test)
         y_pred2=grid_search.predict_proba(self.X_test)
         y_pred2=y_pred2[:,1]
@@ -89,35 +89,82 @@ class Classification:
         auc = mt.auc(fpr, tpr)
         # mark = int((len(fpr))*0.037)
         return fpr, tpr, auc, types #mark
+    
+    def Logistic(self):
+        classifier=LogisticRegression()
+        types='Logistic'
+        # marker="o"
+        parameters =[{'C': [0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4], 'max_iter':[1000],'solver': ['newton-cg','lbfgs','sag'], 'penalty': ['l2']},
+                     {'C': [0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4], 'max_iter':[1000], 'solver': ['saga','liblinear'], 'penalty': ['l1','l2']}]
+        grid_search = GridSearchCV(estimator = classifier,param_grid = parameters,scoring = 'accuracy',n_jobs = -1, cv=10,verbose=0)
+        grid_search.fit(self.X_train, self.y_train)
+        # best_accuracy = grid_search.best_score_
+        # best_parameters=grid_search.best_params_
+        # y_pred=grid_search.predict(self.X_test)
+        # cm = confusion_matrix(self.y_test, y_pred)
+        # accuracy=accuracy_score(self.y_test, y_pred)
+        # cm2=confusion_matrix(self.y_train, grid_search.predict(self.X_train))
+        # output=[type,accuracy*100,cm,cm2,best_accuracy*100,best_parameters]
+        y_pred2=grid_search.predict_proba(self.X_test)
+        y_pred2=y_pred2[:,1]
+        fpr, tpr, _ = mt.roc_curve(self.y_test,  y_pred2)
+        auc = mt.auc(fpr,tpr)
+        return[fpr,tpr,auc,types]
+    
+    def NaiveBayes(self):
+        classifier = GaussianNB()
+        types='NaiveBayes'
+        # marker="*"
+        parameters =[{'var_smoothing':[1e-9]}]
+        grid_search = GridSearchCV(estimator = classifier,param_grid = parameters,scoring = 'accuracy',n_jobs = -1, cv=10)
+        grid_search.fit(self.X_train, self.y_train)
+        # best_accuracy = grid_search.best_score_
+        # best_parameters=grid_search.best_params_
+        # y_pred=grid_search.predict(self.X_test)
+        # cm = confusion_matrix(self.y_test, y_pred)
+        # accuracy=accuracy_score(self.y_test, y_pred)
+        # cm2=confusion_matrix(self.y_train, grid_search.predict(self.X_train))
+        # plt=1
+        # # plt=plot_learning_curve(estimator=classifier,title=type,X=self.X_combined, y=self.y_combined)
+        # output=[type,accuracy*100,cm,cm2,best_accuracy*100,best_parameters,plt]
+        
+        y_pred2=grid_search.predict_proba(self.X_test)
+        y_pred2=y_pred2[:,1]
+        fpr, tpr, _ = mt.roc_curve(self.y_test,  y_pred2)
+        auc = mt.auc(fpr,tpr)
+        return[fpr,tpr,auc,types]
+    
+        
 
     def S1(self):
-            Pfa_target=[x/10000.0 for x in range(25,10000,25)]
-            tpr=[]
-            fpr=[]
-            types="S1"
-            # marker="1"
-            for i in range(len(Pfa_target)):
-                # alpha=1-Pfa_target[i]
-                lambd = 2*special.gammainccinv(self.samples/2,Pfa_target[i])/self.samples
-                # lambd = 2*special.gammainccinv(self.SU/2,Pfa_target[i])/self.SU
-                y_pred=np.array(self.X_test[:,0]>=lambd, dtype=int)
-                
-                tn=np.sum(np.logical_not(self.y_test)&np.logical_not(y_pred))
-                tp=np.sum(np.logical_and(self.y_test, y_pred))
-                fn=np.sum(np.logical_and(self.y_test,np.logical_not(y_pred)))
-                fp=np.sum(np.logical_and(np.logical_not(self.y_test),y_pred))
-                tpr.append(tp/(tp+fn))
-                fpr.append(fp/(fp+tn))
+        
+        # Pfa_target=[x/10000.0 for x in range(25,10000,25)]
+        tpr=[]
+        fpr=[]
+        types="S1"
+        # marker="1"
+        for i in range(len(Pfa_target)):
+            # alpha=1-Pfa_target[i]
+            lambd = 2*special.gammainccinv(self.samples/2,Pfa_target[i])/self.samples
+            # lambd = 2*special.gammainccinv(self.SU/2,Pfa_target[i])/self.SU
+            y_pred=np.array(self.X_test[:,0]>=lambd, dtype=int)
             
-            auc = mt.auc(fpr,tpr)
-            return[fpr,tpr,auc,types]
+            tn=np.sum(np.logical_not(self.y_test)&np.logical_not(y_pred))
+            tp=np.sum(np.logical_and(self.y_test, y_pred))
+            fn=np.sum(np.logical_and(self.y_test,np.logical_not(y_pred)))
+            fp=np.sum(np.logical_and(np.logical_not(self.y_test),y_pred))
+            tpr.append(tp/(tp+fn))
+            fpr.append(fp/(fp+tn))
+        
+        auc = mt.auc(fpr,tpr)
+        return[fpr,tpr,auc,types]
     
     def OR(self):
-        Pfa_target=[x/10000.0 for x in range(25,10000,25)]
+        # Pfa_target=[x/10000.0 for x in range(25,10000,25)]
         tpr=[]
         fpr=[]
         types="OR"
-        marker="v"
+        # marker="v"
         for i in range(len(Pfa_target)):
             # alpha=1-Pfa_target[i]
             lambd = 2*special.gammainccinv(self.samples/2,Pfa_target[i])/self.samples
@@ -136,13 +183,13 @@ class Classification:
         return[fpr,tpr,auc,types]
     
     def AND(self):
-        Pfa_target=[x/10000.0 for x in range(25,10000,25)]
+        # Pfa_target=[x/10000.0 for x in range(25,10000,25)]
         tpr=[]
         fpr=[]
         types="AND"
         # marker=">"
         for i in range(len(Pfa_target)):
-            alpha=1-Pfa_target[i]
+            # alpha=1-Pfa_target[i]
             lambd = 2*special.gammainccinv(self.samples/2,Pfa_target[i])/self.samples
             # lambd = 2*special.gammainccinv(self.SU/2,Pfa_target[i])/self.SU
             y_pred=np.array(np.sum(self.X_test>=lambd,1)==self.SU, dtype=int)
@@ -158,13 +205,13 @@ class Classification:
         return[fpr,tpr,auc,types]
     
     def MRC(self):
-        Pfa_target=[x/10000.0 for x in range(25,10000,25)]
+        # Pfa_target=[x/10000.0 for x in range(25,10000,25)]
         tpr=[]
         fpr=[]
         types="MRC"
         # marker="<"
         for i in range(len(Pfa_target)):
-            alpha=1-Pfa_target[i]
+            # alpha=1-Pfa_target[i]
             lambd = 2*special.gammainccinv(self.samples/2,Pfa_target[i])/self.samples
             # lambd = 2*special.gammainccinv(self.SU/2,Pfa_target[i])/self.SU
             y_pred=np.array(np.sum(self.X_test_2,1)>lambd, dtype=int)

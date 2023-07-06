@@ -22,8 +22,8 @@ def MCS(realize, samples, SU):
 
     for k in range(realize):
         n = gaussianNoise(noisePower, samples)
-        H = channel(SU, d, g, variance, samples)
-        X, S[k] = PUtx(samples, PowerTx, Pr, SU)
+        H = channel(SU,samples)
+        X, S[k] = PUtx(samples, PowerTx, SU)
         PU = np.multiply(H.T, X)
         Z = PU + n
         SNR[:,k] = np.mean(np.abs(PU)**2,axis=1)/noisePower[0]
@@ -31,10 +31,10 @@ def MCS(realize, samples, SU):
 
     meanSNR = np.mean(SNR[:,S==1],1)
     meanSNRdB = 10*np.log10(meanSNR)
-    return Y, S, meanSNR
+    return Y, S, meanSNRdB
 
 
-def PUtx(samples, TXPower, Pr, N):
+def PUtx(samples, TXPower, N):
     S = 0
     X = np.zeros(samples)
     if (np.random.rand(1) <= Pr):
@@ -50,7 +50,7 @@ def gaussianNoise(noisePower, samples):
     return n
 
 
-def channel(N, d, g, variance, samples):
+def channel(N, samples):
     H = np.zeros(N)
     H = np.sqrt(-2 * variance * np.log(np.random.rand(N)))/np.sqrt(2)
     H = np.array(H*np.sqrt(g*(d)))  # Fading + path-loss (amplitude loss)

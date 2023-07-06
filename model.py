@@ -41,9 +41,16 @@ class Classification:
         grid_search.fit(self.X_train, self.y_train)
         # best_accuracy = grid_search.best_score_
         # best_parameters = grid_search.best_params_
-        # y_pred = grid_search.predict(X_test)
+        
+        # for actual prediction
+        y_pred = grid_search.predict(self.X_test)
+        
+        # for ROC, probability prediction
         y_pred2=grid_search.predict_proba(self.X_test)
         y_pred2=y_pred2[:,1]
+        
+        print(y_pred[0:5])
+        print(self.y_test[0:5])
         # cm = mt.confusion_matrix(y_test, y_pred)
         # accuracy = mt.accuracy_score(y_test, y_pred)
         fpr, tpr, _ = mt.roc_curve(self.y_test,  y_pred2)

@@ -53,13 +53,15 @@ demo =Classification(X_train=X_train,y_train=y_train,X_test=X_test,
 
 
 file.append(demo.Linear_SVM())
-file.append(demo.Gaussian_SVM())
-file.append(demo.Logistic())
-file.append(demo.NaiveBayes())
-file.append(demo.S1())
-file.append(demo.OR())
-file.append(demo.AND())
-file.append(demo.MRC())
+# file.append(demo.Gaussian_SVM())
+# file.append(demo.Logistic())
+# file.append(demo.NaiveBayes())
+# file.append(demo.S1())
+# file.append(demo.OR())
+# file.append(demo.AND())
+# file.append(demo.MRC())
+
+
 
 if file:
     plot.show_plot(file)  # , mark

@@ -31,7 +31,7 @@ def MCS(realize, samples, SU):
 
     meanSNR = np.mean(SNR[:,S==1],1)
     meanSNRdB = 10*np.log10(meanSNR)
-    return Y, S, meanSNRdB
+    return Y, S, meanSNR
 
 
 def PUtx(samples, TXPower, N):

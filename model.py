@@ -49,8 +49,8 @@ class Classification:
         y_pred2=grid_search.predict_proba(self.X_test)
         y_pred2=y_pred2[:,1]
         
-        print(y_pred[0:5])
-        print(self.y_test[0:5])
+        # print(1-np.sum(y_pred)/len(y_pred))
+        # print(self.y_test[0:10])
         # cm = mt.confusion_matrix(y_test, y_pred)
         # accuracy = mt.accuracy_score(y_test, y_pred)
         fpr, tpr, _ = mt.roc_curve(self.y_test,  y_pred2)
@@ -68,7 +68,7 @@ class Classification:
 
         auc = mt.auc(fpr, tpr)
         # mark = int((len(fpr))*0.037)
-        return fpr, tpr, auc, types #mark
+        return fpr, tpr, auc, types, y_pred #mark
     
     
 

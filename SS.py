@@ -26,7 +26,7 @@ Eh = 0.1    # Harvested energy during one slot
 # PowerNo = 10**(Nw/10)
 # g = 10**-5  # Path loss coefficeint 10^(-5)
 # d = 500 # PU-SU distance in meters
-samples = 100  # No. of sample per sensing time
+samples = 20  # No. of sample per sensing time
 # w = 5e6     # Bandwidth
 # samples = 50  # No. of sample
 # N = SU
@@ -61,8 +61,30 @@ file.append(demo.Linear_SVM())
 # file.append(demo.AND())
 # file.append(demo.MRC())
 
+_,_,_,_,y_p = file[0]
+
+R = 0
+W = 0
+
+total = len(y_test)
+
+PH1 = (np.sum(y_test)/total)
+PH0 = 1-PH1
+
+for y_a, y_p in zip(y_test, y_p):
+    if y_a == 1 and y_p == 0:
+        W += 1
+    if y_a == 0 and y_p == 0:
+        R += 1
+
+one_pf = R/total
+one_pd = W/total
+
+th1 = (500-samples)/500
+th = th1*(PH1*one_pd+PH0*one_pf)
+print(th)
 
 
-if file:
-    plot.show_plot(file)  # , mark
+# if file:
+#     plot.show_plot(file)  # , mark
 # plt.show()

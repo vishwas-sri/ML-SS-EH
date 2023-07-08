@@ -68,7 +68,7 @@ class Classification:
 
         auc = mt.auc(fpr, tpr)
         # mark = int((len(fpr))*0.037)
-        return fpr, tpr, auc, types, y_pred #mark
+        return fpr, tpr, auc, types, y_pred#mark
     
     
 
@@ -164,7 +164,7 @@ class Classification:
             fpr.append(fp/(fp+tn))
         
         auc = mt.auc(fpr,tpr)
-        return[fpr,tpr,auc,types]
+        return[fpr,tpr,auc,types,y_pred]
     
     def OR(self):
         # Pfa_target=[x/10000.0 for x in range(25,10000,25)]

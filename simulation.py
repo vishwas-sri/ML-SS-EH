@@ -1,8 +1,8 @@
 import numpy as np
 variance = 2
-T = 100  # Time span for one slot 100ms
-mu = 0.02   # Sensing duration ratio
-t = mu*T     # Sensing time
+# T = 100e-3  # Time span for one slot 100ms
+# mu = 0.02   # Sensing duration ratio
+# t = mu*T     # Sensing time
 Pr = 0.5    # Probability of spectrum occupancy
 Pw = -60    # Primary signal power in dBm 
 PowerTx = 10**(Pw/10)  # Transmitted power 0.1

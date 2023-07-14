@@ -15,7 +15,7 @@ P1 = 0.5
 Ps1 = 0.05
 Ph1 = 0.45
 Pt1 = 0.5
-m = 20
+m = 25
 
 k = [2,3,5,9]
 delta = [5,10,15,20]
@@ -31,10 +31,10 @@ def calculate_pi(k, delta):
     # numbering in the sequence otherwise it 
     # will not give desired result
     i = 0
-    b = True
+    b = 1
     n = delta*k
     p = m*k
-    while b == True:
+    while b == 1:
         if i <= n:
             G.add_edge(i, i, weight=P0)
             G.add_edge(i, k+i, weight=P1)
@@ -44,14 +44,14 @@ def calculate_pi(k, delta):
             G.add_edge(n, n-1, weight=Ps1)
             G.add_edge(n, n+k-1, weight=Ph1)
             G.add_edge(n, 0, weight=Pt1)
-        elif n<p:
+        else:
             n += 1
             G.add_edge(n, n-1, weight=Ps1)
             G.add_edge(n, n+k-1, weight=Ph1)
             G.add_edge(n, 0, weight=Pt1)
             k -= 1
-        else:
-            b = False
+            if n == p:
+                b=0
            
     # G.add_edge(i-1, i-2, weight=Ps1)
     # G.add_edge(i-1, i, weight=Ph1)
@@ -99,6 +99,6 @@ def calculate_pi(k, delta):
     return pi_d,transition_matrix
     # print("PI_i = ",pi_d)
 
-# for j in range(len(k)):
-#     for d in range(len(delta)):
-pi,tm = calculate_pi(3,5)
+for j in range(len(k)):
+    for d in range(len(delta)):
+        pi[j,d],tm = calculate_pi(k[d],delta[d])

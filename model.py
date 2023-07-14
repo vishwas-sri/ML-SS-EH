@@ -7,6 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from scipy import special
 
 Pfa_target=[x/10000.0 for x in range(25,10000,25)]
+# Pfa_target=[0.4,0.3,0.2,0.1]
 class Classification:
     #print(np.concatenate((y_pred.reshpipape(len(y_pred),1), self.y_test.reshape(len(self.y_test),1)),1))
     def __init__(self, X_train=None,y_train=None,X_test=None,y_test=None,samples=None,SU=None,X_test_2=None):
@@ -68,7 +69,7 @@ class Classification:
 
         auc = mt.auc(fpr, tpr)
         # mark = int((len(fpr))*0.037)
-        return fpr, tpr, auc, types, y_pred#mark
+        return fpr, tpr, auc, types#mark
     
     
 
@@ -162,9 +163,10 @@ class Classification:
             fp=np.sum(np.logical_and(np.logical_not(self.y_test),y_pred))
             tpr.append(tp/(tp+fn))
             fpr.append(fp/(fp+tn))
-        
+        # print(fpr)
+        # print(tpr)
         auc = mt.auc(fpr,tpr)
-        return[fpr,tpr,auc,types,y_pred]
+        return[fpr,tpr,auc,types]
     
     def OR(self):
         # Pfa_target=[x/10000.0 for x in range(25,10000,25)]
@@ -185,7 +187,8 @@ class Classification:
             tpr.append(tp/(tp+fn))
             fpr.append(fp/(fp+tn))
         
-        
+        # print(fpr)
+        # print(tpr)
         auc = mt.auc(fpr,tpr)
         return[fpr,tpr,auc,types]
     
@@ -229,6 +232,7 @@ class Classification:
             fp=np.sum(np.logical_and(np.logical_not(self.y_test),y_pred))
             tpr.append(tp/(tp+fn))
             fpr.append(fp/(fp+tn))
-        
+        print(fpr)
+        print(tpr)
         auc = mt.auc(fpr,tpr)
         return[fpr,tpr,auc,types]

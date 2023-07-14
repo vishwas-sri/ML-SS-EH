@@ -13,33 +13,54 @@ P1 = 0.5
 Ps1 = 0.05
 Ph1 = 0.45
 Pt1 = 0.5
-
+m = 5
+k = 2
+delta = 3
 # Create a directed graph
 G = nx.DiGraph()
 
 # Add edges with transition probabilities
 # numbering in the sequence otherwise it 
 # will not give desired result
-G.add_edge('state0', 'state0', weight=P0)
-G.add_edge('state0', 'state2', weight=P1)
-G.add_edge('state2', 'state2', weight=P0)
-G.add_edge('state2', 'state4', weight=P1)
-G.add_edge('state4', 'state4', weight=P0)
-G.add_edge('state4', 'state6', weight=P1)
-G.add_edge('state6', 'state6', weight=P0)
-G.add_edge('state7', 'state6', weight=Ps1)
-G.add_edge('state6', 'state8', weight=P1)
-G.add_edge('state7', 'state9', weight=Ph1)
-G.add_edge('state7', 'state0', weight=Pt1)
-G.add_edge('state8', 'state7', weight=Ps1)
-G.add_edge('state8', 'state10', weight=Ph1)
-G.add_edge('state8', 'state0', weight=Pt1)
-G.add_edge('state9', 'state8', weight=Ps1)
-G.add_edge('state9', 'state10', weight=Ph1)
-G.add_edge('state9', 'state0', weight=Pt1)
-G.add_edge('state10', 'state9', weight=Ps1)
-G.add_edge('state10', 'state10', weight=Ph1)
-G.add_edge('state10', 'state0', weight=Pt1)
+i = 0
+
+while i<=m*k:
+    if i <= delta*k:
+        G.add_edge(i, i, weight=P0)
+        G.add_edge(i, k+i, weight=P1)
+        i = k+i
+    else:
+        G.add_edge(i-1, i-2, weight=Ps1)
+        G.add_edge(i-1, i+1, weight=Ph1)
+        G.add_edge(i-1, 0, weight=Pt1)
+        i += 1
+        if 
+    else:
+        G.add_edge(i-1, i-2, weight=Ps1)
+        G.add_edge(i-1, i, weight=Ph1)
+        G.add_edge(i-1, 0, weight=Pt1)
+    #     G.add_edge(i, i-1, weight=Ps1)
+    #     G.add_edge(i, i, weight=Ph1)
+    #     G.add_edge(i, 0, weight=Pt1)
+        
+    # G.add_edge(2, 2, weight=P0)
+    # G.add_edge(2, 4, weight=P1)
+# G.add_edge('state4', 'state4', weight=P0)
+# G.add_edge('state4', 'state6', weight=P1)
+# G.add_edge('state6', 'state6', weight=P0)
+# G.add_edge('state7', 'state6', weight=Ps1)
+# G.add_edge('state6', 'state8', weight=P1)
+# G.add_edge('state7', 'state9', weight=Ph1)
+# G.add_edge('state7', 'state0', weight=Pt1)
+# G.add_edge('state8', 'state7', weight=Ps1)
+# G.add_edge('state8', 'state10', weight=Ph1)
+# G.add_edge('state8', 'state0', weight=Pt1)
+# G.add_edge('state9', 'state8', weight=Ps1)
+# G.add_edge('state9', 'state10', weight=Ph1)
+# G.add_edge('state9', 'state0', weight=Pt1)
+# G.add_edge('state10', 'state9', weight=Ps1)
+# G.add_edge('state10', 'state10', weight=Ph1)
+# G.add_edge('state10', 'state0', weight=Pt1)
 # ... continue adding edges for other states and their transition probabilities
 
 # Get the list of states
@@ -74,4 +95,5 @@ values, left = scipy.linalg.eig(transition_matrix, right = False, left = True)
 
 pi = left[:,0]
 pi_normalized = [(x/np.sum(pi)).real for x in pi]
-print(pi_normalized)
+pi_d = sum(pi_normalized[4:])
+print(pi_d)

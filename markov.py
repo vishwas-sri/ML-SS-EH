@@ -94,16 +94,16 @@ def calculate_pi(k, d):
                 transition_matrix[i, j] = successors[next_state]['weight'] / total_weight
     
     # Check if the transition probabilities are valid
-    if not np.allclose(np.sum(transition_matrix, axis=1), 1):
-        print("Invalid transition probabilities. The probabilities should sum to 1.")
-    else:
-        print("Valid transition probabilities.")
+    # if not np.allclose(np.sum(transition_matrix, axis=1), 1):
+    #     print("Invalid transition probabilities. The probabilities should sum to 1.")
+    # else:
+    #     print("Valid transition probabilities.")
     
     # Display the transition matrix
     # print("Transition Matrix:")
     # print(transition_matrix)
-    # idx = np.where(transition_matrix[:, 0]==0.5)[0]
-    # idx = idx[1]
+    idx = np.where(transition_matrix[:, 0]==0.5)[0]
+    idx = idx[1]
     
     values, left = scipy.linalg.eig(transition_matrix, right = False, left = True)
     
@@ -112,10 +112,14 @@ def calculate_pi(k, d):
     
     pi = left[:,0]
     pi_normalized = [(x/np.sum(pi)).real for x in pi]
-    pi_d = sum(pi_normalized)
+    pi_d = sum(pi_normalized[idx:])
+    # print("PI_i = ", pi_d)
     return pi_d,transition_matrix,G
-    # print("PI_i = ",pi_d)
+    
 
 for j in range(len(k)):
     for a in range(len(d)):
-        pi[j,a],tm, G = calculate_pi(k[a],d[a])
+        pi[j,a],tm, G = calculate_pi(k[j],d[a])
+
+np.save('PI', pi)
+# pi[j,a],tm, G=calculate_pi(9,10)

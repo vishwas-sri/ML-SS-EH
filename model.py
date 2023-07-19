@@ -166,6 +166,8 @@ class Classification:
         # print(fpr)
         # print(tpr)
         auc = mt.auc(fpr,tpr)
+        tpr = np.array(tpr)
+        fpr = np.array(fpr)
         return[fpr,tpr,auc,types]
     
     def OR(self):
@@ -186,10 +188,13 @@ class Classification:
             fp=np.sum(np.logical_and(np.logical_not(self.y_test),y_pred))
             tpr.append(tp/(tp+fn))
             fpr.append(fp/(fp+tn))
+                      
         
         # print(fpr)
         # print(tpr)
         auc = mt.auc(fpr,tpr)
+        tpr = np.array(tpr)
+        fpr = np.array(fpr) 
         return[fpr,tpr,auc,types]
     
     def AND(self):
@@ -212,6 +217,8 @@ class Classification:
             fpr.append(fp/(fp+tn))
         
         auc = mt.auc(fpr,tpr)
+        tpr = np.array(tpr)
+        fpr = np.array(fpr)
         return[fpr,tpr,auc,types]
     
     def MRC(self):
@@ -232,7 +239,9 @@ class Classification:
             fp=np.sum(np.logical_and(np.logical_not(self.y_test),y_pred))
             tpr.append(tp/(tp+fn))
             fpr.append(fp/(fp+tn))
-        print(fpr)
-        print(tpr)
+        # print(fpr)
+        # print(tpr)
         auc = mt.auc(fpr,tpr)
+        tpr = np.array(tpr)
+        fpr = np.array(fpr)
         return[fpr,tpr,auc,types]

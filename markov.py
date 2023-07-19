@@ -8,7 +8,7 @@ import scipy.linalg
 import numpy as np
 import networkx as nx
 
-pi = np.zeros((4,4))
+
 
 P0 = 0.5
 P1 = 0.5
@@ -18,8 +18,10 @@ Pt1 = 0.5
 m = 25
 
 k = [2,3,5,9]
-d = [5,10,15,20]
+d = np.arange(1,21,1)
+d = list(d)
 
+pi = np.zeros((len(k),len(d)))
 
 
 

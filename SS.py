@@ -28,7 +28,7 @@ import plot
 # # PowerNo = 10**(Nw/10)
 # # g = 10**-5  # Path loss coefficeint 10^(-5)
 # # d = 500 # PU-SU distance in meters
-# samples = int(2*t*fs)
+# samples = 350 #int(2*t*fs)
 # # samples = sample.astype(int) # No. of sample per sensing time
 # # w = 5e6     # Bandwidth
 # # samples = 50  # No. of sample
@@ -44,7 +44,7 @@ def main(realize,realize_test, samples, SU):
     samples = samples
     SU = SU
     
-    # MCS(realize,samples,SU)
+# MCS(realize,samples,SU)
     X_train, y_train, _ = sm.MCS(realize, samples, SU)
     X_test, y_test, SNR = sm.MCS(realize_test, samples, SU)
     
@@ -66,12 +66,12 @@ def main(realize,realize_test, samples, SU):
     
     file.append(demo.Linear_SVM())
     file.append(demo.Gaussian_SVM())
-    # file.append(demo.Logistic())
-    # file.append(demo.NaiveBayes())
-    # file.append(demo.S1())
-    # file.append(demo.OR())
-    # file.append(demo.AND())
-    # file.append(demo.MRC())
+    file.append(demo.Logistic())
+    file.append(demo.NaiveBayes())
+    file.append(demo.S1())
+    file.append(demo.OR())
+    file.append(demo.AND())
+    file.append(demo.MRC())
     
     desired_pd = 0.9
     desired_pf = 0.1
